@@ -36,10 +36,18 @@ To set up the program to run it locally on you computer follow the steps below:-
   ![complete database sample](/sample/complete_database_sample.png)
 - Save the id of this database -
   - To get the id, Copy the database link (click on "Copy link to view") and extract the id
-    eg - if the link is - "https://www.notion.so/arjunvarshney/**1e91e0f8b2ed435480e180xxxxxxxxxx**?v=58f03c0390104bc4816cacec6be89d7d"
+    eg - if the link is - "https://www.notion.so/arjunvarshney/1e91e0f8b2ed435480e180xxxxxxxxxx?v=58f03c0390104bc4816cacec6be89d7d"
     then "1e91e0f8b2ed435480e180xxxxxxxxxx" is the database id.
+- You may customize the database as desired
+  - notion database tutorial - https://youtu.be/mAJOpO73d8Y
 
-**Step 5:** Change necessary files -
+**Step 5:** Connect your page to the Integration -
+
+> Note - I named my integration "test"
+
+![connect page to integration](/sample/connect_page_to_integration.png)
+
+**Step 6:** Change necessary files -
 
 - Rename "sample.env" to ".env"
 
@@ -63,3 +71,5 @@ Now you are good to go, You can run the index file as is or further automate usi
 
 How to automate run batch files using task scheduler - https://youtu.be/lzy8KNnqV0I
 (You can use the "CollegeUpdate.bat" file for this purpose)
+
+> Note - A "data.json" will also get created, If you want to use it somewhere else you may use it.
