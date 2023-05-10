@@ -39,6 +39,7 @@ const notion = new Client({
 
 const database_id = process.env.DATABASE_ID || environment_variables.DATABASE_ID;
 
+// function to delete all pages in the database in notion
 const deleteAllPages = async () => {
   try {
     const listResponse = await notion.databases.query({
@@ -57,6 +58,7 @@ const deleteAllPages = async () => {
   }
 };
 
+// function to create pages in notion with the updated information
 const createPage = async (properties, children) => {
   await notion.pages.create({
     icon: {
@@ -74,6 +76,7 @@ const createPage = async (properties, children) => {
   });
 };
 
+// function to process attendance data and make it usable
 const mergeAttendance = (att1, att2) => {
   // put Lecture instaed of MTG in the type of att1
   Object.keys(att1).forEach((date) => {
@@ -259,9 +262,13 @@ const main = async () => {
       },
     };
 
+    // to get the attendance data
     const total_att_data = getAllAttendanceData({ ...attendanceData });
+
+    // contains all the blocks for notion
     const total_att_blocks = createBlocks(total_att_data);
 
+    // final block structure to be appended in notion
     let total_att_page_content = [
       {
         object: "block",
@@ -279,6 +286,7 @@ const main = async () => {
       ...total_att_blocks,
     ];
 
+    // create pages in notion page
     await createPage(total_att_layout, total_att_page_content);
 
     for (const [subjectName, sub_Details] of Object.entries(academicData)) {
@@ -302,6 +310,7 @@ const main = async () => {
         sub_datewise_att = attendanceData[subjectName].datewise;
       }
 
+      // database fields data
       let layout = {
         Subject: {
           title: [
@@ -351,6 +360,7 @@ const main = async () => {
       // create blocks for the attendance
       const att_blocks = createBlocks(sub_datewise_att);
 
+      // content of the page to be appended inside the page of the  respective subject
       let pageContent = [
         {
           object: "block",
