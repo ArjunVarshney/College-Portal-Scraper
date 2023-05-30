@@ -326,7 +326,7 @@ const getCollegeData = async () => {
       attendance: attendanceData,
     };
   } catch (err) {
-    console.log(err);
+    console.log("\n\n" + err.message);
   }
 };
 

@@ -32,12 +32,11 @@ const nthNumber = (number) => {
 };
 
 const notion = new Client({
-  auth:
-    process.env.NOTION_TOKEN ||
-    environment_variables.NOTION_TOKEN,
+  auth: process.env.NOTION_TOKEN || environment_variables.NOTION_TOKEN,
 });
 
-const database_id = process.env.DATABASE_ID || environment_variables.DATABASE_ID;
+const database_id =
+  process.env.DATABASE_ID || environment_variables.DATABASE_ID;
 
 // function to delete all pages in the database in notion
 const deleteAllPages = async () => {
@@ -392,11 +391,13 @@ const main = async () => {
     }
   } catch (error) {
     console.log(
-      "May be something is wrong with the portal ! The code works fine...."
+      "May be something is wrong with the portal ! The code works fine...." +
+        "\n\n" +
+        "Restarting in 30 minutes\n\n\n"
     );
-    console.log(error);
-    await sleep(1000 * 60 * 5);
-    main();
+    await sleep(1000 * 60 * 30);
+    console.log("Started again...");
+    await main();
   }
 };
 
