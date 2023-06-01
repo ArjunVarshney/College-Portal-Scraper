@@ -291,7 +291,7 @@ const getAttendanceInformation = async (page) => {
 
 const getCollegeData = async () => {
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
 
     // do everything in a incognito tab
     const context = await browser.createIncognitoBrowserContext();
