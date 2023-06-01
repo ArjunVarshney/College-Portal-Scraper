@@ -31,9 +31,8 @@ const getSubjectData = async (frame) => {
     const data = await frame.evaluate((e) => {
       const cells = e.querySelectorAll("td");
       const assignment = cells[2].querySelector("div > span > a").innerText;
-      const grade = cells[4]
-        .querySelector("div > span")
-        .innerText.split(".")[0];
+      const grade =
+        cells[4].querySelector("div > span")?.innerText?.split(".")[0] || 0;
       const maxMarks = cells[5].querySelector("div > span").innerText;
       const marksString = grade + "/" + maxMarks;
       return {
@@ -292,7 +291,7 @@ const getAttendanceInformation = async (page) => {
 
 const getCollegeData = async () => {
   try {
-    const browser = await puppeteer.launch({ headless: true });
+    const browser = await puppeteer.launch({ headless: false });
 
     // do everything in a incognito tab
     const context = await browser.createIncognitoBrowserContext();
@@ -326,7 +325,7 @@ const getCollegeData = async () => {
       attendance: attendanceData,
     };
   } catch (err) {
-    console.log("\n\n" + err.message);
+    console.log("\n\n" + err);
   }
 };
 
