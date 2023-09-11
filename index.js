@@ -123,7 +123,7 @@ const getAllAttendanceData = (att_data) => {
   const merged = {};
   delete att_data["total"];
   for (const [subject, att] of Object.entries(att_data)) {
-    const data = att.datewise;
+    const data = att.datewise == " " ? "blank" : att.datewise;
     for (const [date, days] of Object.entries(data)) {
       if (!merged[date]) merged[date] = [];
       days.forEach((lec) => {
@@ -196,7 +196,7 @@ const createBlocks = (att) => {
       });
     });
 
-    const att_date = new Date(date);
+    const att_date = new Date(date) || new Date();
 
     blocks.push({
       object: "block",
@@ -297,16 +297,16 @@ const main = async () => {
 
       if (attendanceData[subjectName + " (Tutorial)"]) {
         const sub_tut_Attendance =
-          attendanceData[subjectName + " (Tutorial)"].percentage;
+          attendanceData[subjectName + " (Tutorial)"]?.percentage;
         sub_Attendance += " | " + sub_tut_Attendance + "%";
         sub_datewise_att = mergeAttendance(
           sub_datewise_att,
-          attendanceData[subjectName + " (Tutorial)"].datewise
+          attendanceData[subjectName + " (Tutorial)"]?.datewise
         );
       }
       if (subjectName.includes("Lab")) {
-        sub_Attendance = attendanceData[subjectName].percentage + "%";
-        sub_datewise_att = attendanceData[subjectName].datewise;
+        sub_Attendance = attendanceData[subjectName]?.percentage + "%";
+        sub_datewise_att = attendanceData[subjectName]?.datewise;
       }
 
       // database fields data
@@ -391,7 +391,9 @@ const main = async () => {
     }
   } catch (error) {
     console.log(
-      "May be something is wrong with the portal ! The code works fine...." +
+      "May be something is wrong with the portal ! The code works fine....: " +
+        "\n\n" +
+        error +
         "\n\n" +
         "Restarting in 30 minutes\n\n\n"
     );
