@@ -94,46 +94,30 @@ const login = async (page) => {
 };
 
 const getSubjectInformation = async (page) => {
-   // click on the self Service button
-   await page.waitForSelector("#CO_EMPLOYEE_SELF_SERVICE");
-   await sleep(500);
-   await page.evaluate(() =>
-      document.querySelector("#CO_EMPLOYEE_SELF_SERVICE > div").click()
+   await page.waitForSelector("#ptnav2pglt");
+   await sleep(2000);
+
+   page.goto(
+      "https://campus.srmcem.ac.in/psp/ps/EMPLOYEE/HRMS/c/SA_LEARNER_SERVICES.SS_LAM_STD_GR_LST.GBL?PORTALPARAM_PTCNAV=HC_SS_LAM_STD_GR_LST_GBL1&amp;EOPP.SCNode=HRMS&amp;EOPP.SCPortal=EMPLOYEE&amp;EOPP.SCName=CO_EMPLOYEE_SELF_SERVICE&amp;EOPP.SCLabel=Self%20Service&amp;EOPP.SCPTfname=CO_EMPLOYEE_SELF_SERVICE&amp;FolderPath=PORTAL_ROOT_OBJECT.CO_EMPLOYEE_SELF_SERVICE.HCCC_ENROLLMENT.HC_SS_LAM_STD_GR_LST_GBL1&amp;IsFolder=false"
    );
-
-   // click on the enrollment button
-   await page.waitForSelector("#HCCC_ENROLLMENT");
    await sleep(500);
-   await page.evaluate(() =>
-      document.querySelector("#HCCC_ENROLLMENT > div").click()
-   );
 
-   // click on View my assignment button
-   await page.waitForSelector("#crefli_HC_SS_LAM_STD_GR_LST_GBL1");
-   await sleep(500);
-   await page.evaluate(() => {
-      document.querySelector("#crefli_HC_SS_LAM_STD_GR_LST_GBL1 > a").click();
-   });
-
-   // click on the last item in the table
-   if (!waitForNavigationDone) {
-      await page.waitForNavigation();
-      await sleep(500);
-      waitForNavigationDone = true;
-   }
+   page.waitForSelector("#ptifrmtgtframe");
+   await sleep(2000);
 
    const frame = await page
       .frames()
       .find((frame) => frame.name() === "TargetContent");
 
+   await frame.waitForSelector("body");
+   await frame.waitForSelector("body > form");
+   await frame.waitForSelector("#win0divPAGECONTAINER > table");
    await frame.waitForSelector("#DERIVED_SSS_SCT_SSR_PB_GO");
-   await sleep(500);
+   await sleep(2000);
 
    await frame.evaluate(() => {
       document
-         .querySelector(
-            "#SSR_DUMMY_RECV1\\$scroll\\$0 > tbody > tr:last-child > td:first-child > div > input"
-         )
+         .querySelector("tbody > tr:last-child > td > div > input")
          .click();
       // click on continue
       document.querySelector("#DERIVED_SSS_SCT_SSR_PB_GO").click();
@@ -183,46 +167,29 @@ const getSubjectInformation = async (page) => {
          document.querySelector("#DERIVED_SSR_FC_SSS_CHG_CLS_LINK").click();
       });
       bar1.increment(percentage.assignmentFetch / rows.length);
+      await sleep(2000);
    }
 
    return finalData;
 };
 
 const getAttendanceInformation = async (page) => {
-   // click on the Curriculum management button
-   await page.waitForSelector("#HCSR_CURRICULUM_MANAGEMENT");
-   await sleep(500);
-   await page.evaluate(() =>
-      document.querySelector("#HCSR_CURRICULUM_MANAGEMENT > div").click()
+   await page.goto(
+      "https://campus.srmcem.ac.in/psp/ps/EMPLOYEE/HRMS/c/MANAGE_ACADEMIC_RECORDS.STDNT_ATTEND_TERM.GBL?FolderPath=PORTAL_ROOT_OBJECT.HCSR_CURRICULUM_MANAGEMENT.HCSR_ATTENDANCE_ROSTER.HC_STDNT_ATTENDANCE_GBL&IsFolder=false&IgnoreParamTempl=FolderPath%2cIsFolder"
    );
 
-   // click on the Attendance roster button
-   await page.waitForSelector("#HCSR_ATTENDANCE_ROSTER");
-   await sleep(500);
-   await page.evaluate(() =>
-      document.querySelector("#HCSR_ATTENDANCE_ROSTER > div").click()
-   );
-
-   // click on Attendance Roster by student button
-   await page.waitForSelector("#crefli_HC_STDNT_ATTENDANCE_GBL");
-   await sleep(500);
-   await page.evaluate(() => {
-      document.querySelector("#crefli_HC_STDNT_ATTENDANCE_GBL > a").click();
-   });
-
-   // click on the last item in the table
-   if (!waitForNavigationDone) {
-      await page.waitForNavigation();
-      await sleep(500);
-      waitForNavigationDone = true;
-   }
+   await page.waitForSelector("#ptifrmtgtframe");
+   await sleep(2000);
 
    const frame = await page
       .frames()
       .find((frame) => frame.name() === "TargetContent");
 
-   await frame.waitForSelector("#PTSRCHRESULTS");
-   await sleep(500);
+   await frame.waitForSelector("body");
+   await frame.waitForSelector("#win0divSEARCHRESULT");
+   await frame.waitForSelector("#win0divSEARCHRESULT > table > tbody");
+   await frame.waitForSelector("#win0divSEARCHRESULT > table > tbody");
+   await sleep(2000);
 
    await frame.evaluate(() => {
       document
@@ -233,6 +200,7 @@ const getAttendanceInformation = async (page) => {
    });
    const finalData = {};
 
+   await frame.waitForSelector("body > form");
    await frame.waitForSelector("#SRM_CLAS_PER_DR_TOTAL_PERCENT");
    await sleep(500);
 
@@ -249,7 +217,7 @@ const getAttendanceInformation = async (page) => {
 
    // scrape the data from the attendance table
    await frame.waitForSelector("#STDNT_ENRL\\$scroll\\$0 tbody");
-   await sleep(500);
+   await sleep(2000);
 
    const rows = await frame.$$("#STDNT_ENRL\\$scroll\\$0 tbody tr");
 
@@ -273,10 +241,11 @@ const getAttendanceInformation = async (page) => {
       }, row);
 
       const [att_sub_data, component] = await getDatewiseAttendance(frame);
-
       // click on Attendance Roster by student button
       await page.evaluate(() => {
-         document.querySelector("#crefli_HC_STDNT_ATTENDANCE_GBL > a").click();
+         document
+            .querySelector("#pthnavbccrefanc_HC_STDNT_ATTENDANCE_GBL")
+            .click();
       });
 
       //  storing in finalData according to the names
@@ -292,6 +261,7 @@ const getAttendanceInformation = async (page) => {
          };
       }
       bar1.increment(percentage.attendanceFetch / rows.length);
+      await sleep(2000);
    }
 
    return finalData;
@@ -299,7 +269,7 @@ const getAttendanceInformation = async (page) => {
 
 const getCollegeData = async () => {
    try {
-      const browser = await puppeteer.launch({ headless: false });
+      const browser = await puppeteer.launch({ headless: true });
 
       // do everything in a incognito tab
       const context = await browser.createIncognitoBrowserContext();
@@ -316,7 +286,7 @@ const getCollegeData = async () => {
       bar1.increment(percentage.login);
 
       const subjectData = await getSubjectInformation(page);
-
+      await sleep(2000);
       const attendanceData = await getAttendanceInformation(page);
 
       await browser.close();
