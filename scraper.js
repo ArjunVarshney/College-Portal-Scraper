@@ -269,7 +269,7 @@ const getAttendanceInformation = async (page) => {
 
 const getCollegeData = async () => {
    try {
-      const browser = await puppeteer.launch({ headless: true });
+      const browser = await puppeteer.launch({ headless: "new" });
 
       // do everything in a incognito tab
       const context = await browser.createIncognitoBrowserContext();
@@ -278,6 +278,9 @@ const getCollegeData = async () => {
       await page.goto(
          "https://campus.srmcem.ac.in/psp/ps/?cmd=login&languageCd=ENG&"
       );
+
+      page.setDefaultTimeout(60 * 1000);
+      page.setDefaultNavigationTimeout(60 * 1000);
 
       await sleep(500);
 
